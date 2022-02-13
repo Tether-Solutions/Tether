@@ -1,6 +1,7 @@
 from requests import Request, Session
 import json
 import pprint
+import time
 
 
 url = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest' #URL of the data api
@@ -18,10 +19,22 @@ headers = {
 session = Session() #saves information like cookies and saves time
 session.headers.update(headers) #passess in the required information to the api
 
-response = session.get(url, params=parameters) #gets the JSON file from the API
-data = json.loads(response.text)
 
-ethPrice = data['data']['ETH'][0]['quote']['USD']['price']
+def ethPriceGetter():
+    response = session.get(url, params=parameters)  # gets the JSON file from the API
+    data = json.loads(response.text)
 
-print("Etherium Price for Today: " + ethPrice)
+    ethPrice = data['data']['ETH'][0]['quote']['USD']['price']
+
+    return ethPrice
+
+
+print(ethPriceGetter())
+
+for x in range(2):
+    time.sleep(120)
+    response = session.get(url, params=parameters)
+    print(ethPriceGetter())
+
+
 
