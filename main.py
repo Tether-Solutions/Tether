@@ -22,4 +22,6 @@ response = session.get(url, params=parameters) #gets the JSON file from the API
 data = json.loads(response.text)
 
 ethPrice = data['data']['ETH'][0]['quote']['USD']['price']
-pprint.pprint(data['data']['ETH'][0]['quote']['USD'])
+
+print("Etherium Price for Today: " + ethPrice)
+
