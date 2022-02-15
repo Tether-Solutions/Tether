@@ -1,8 +1,6 @@
 from requests import Request, Session
 import json
-import pprint
 import time
-
 import itertools
 
 #HELLO
