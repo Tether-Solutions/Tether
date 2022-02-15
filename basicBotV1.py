@@ -16,4 +16,4 @@ def buyDip(ethPrice):
     simulationETH += amountToConvert
     simulationUSD -= (amountToConvert * ethPrice)
     print("Currently(" + time.ctime(seconds) + "), ETH reserves are at " + simulationETH + " and USDC reserves are at " + simulationUSD)
-#tesing discord push updates
+#tesing discord push updatessds 
