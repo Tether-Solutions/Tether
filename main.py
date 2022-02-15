@@ -25,21 +25,31 @@ session = Session() #saves information like cookies and saves time
 session.headers.update(headers) #passess in the required information to the api
 
 
-def ethPriceGetter():
+def ethPriceReport():
     response = session.get(url, params=parameters)  # gets the JSON file from the API
     data = json.loads(response.text)
 
     ethPrice = data['data']['ETH'][0]['quote']['USD']['price']
 
-    return ethPrice
+    ethPercentChangeHourly = data['data']['ETH'][0]['quote']['USD']['percent_change_1h']
+    ethPercentChangeDaily = data['data']['ETH'][0]['quote']['USD']['percent_change_24h']
+    ethPercentChangeWeekly = data['data']['ETH'][0]['quote']['USD']['percent_change_7d']
+
+    priceReportETH = {
+        'priceETH' : ethPrice,
+        'percentChangeHRLY' : ethPercentChangeHourly,
+        'percentChangeDAILY' : ethPercentChangeDaily,
+        'percentChangeWEEKLY': ethPercentChangeWeekly,
+    }
+    return priceReportETH
 
 
-print(ethPriceGetter())
+
+print(ethPriceReport()['priceETH'])
 
 for x in itertools.repeat([]): #Infinite Loop to get
     time.sleep(delayBetweenRequests) #delay between requests
-    response = session.get(url, params=parameters)
-    print(ethPriceGetter())
+    print(ethPriceReport()['priceETH'])
 
 
 
