@@ -7,7 +7,7 @@ def send_sms_via_email(
     message: str,
     provider: str,
     sender_credentials: tuple,
-    subject: str = "sent using etext",
+    subject: str = "Hi! Its Crypto Bot!",
     smtp_server: str = "smtp.gmail.com",
     smtp_port: int = 465,
 ):
@@ -23,6 +23,15 @@ def send_sms_via_email(
         email.sendmail(sender_email, receiver_email, email_message)
 
 
+def main():
+    number = '8042456976'
+    message = "sup"
+    provider = "T-Mobile"
+
+    sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
+
+    send_sms_via_email(number, message, provider, sender_credentials)
+
 
 def priceReportDOWN(ethSMSPercentChangeHourly, ethSMSPrice):
     ethSMSPercentChangeHourly /= 100
@@ -30,7 +39,7 @@ def priceReportDOWN(ethSMSPercentChangeHourly, ethSMSPrice):
     ethSMSPrice = round(ethSMSPrice, 2)
 
     number = '8045479964'
-    message = "Etherium has gown down from " + str((1+ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
+    message = "Ethereum has gown down from " + str((1+ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
     provider = "T-Mobile"
 
     sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
@@ -45,7 +54,7 @@ def priceReportUP(ethSMSPercentChangeHourly, ethSMSPrice):
     ethSMSPrice = round(ethSMSPrice, 2)
 
     number = '8045479964'
-    message = "Etherium has gone up from " + str((1-ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
+    message = "Ethereum has gone up from " + str((1-ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
     provider = "T-Mobile"
 
     sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
@@ -54,3 +63,5 @@ def priceReportUP(ethSMSPercentChangeHourly, ethSMSPrice):
 
     return "sent!"
 
+
+main()
