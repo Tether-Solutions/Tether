@@ -42,11 +42,10 @@ def ethPriceReport():
     return priceReportETH
 
 
-print(ethPriceReport()['priceETH'])
-
+"""
 for x in itertools.repeat([]): #Infinite Loop to get
     time.sleep(delayBetweenRequests) #delay between requests
     print(ethPriceReport()['priceETH'])
-
+"""
 
 
