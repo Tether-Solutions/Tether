@@ -1,13 +1,6 @@
 import email, smtplib, ssl
 from providers import PROVIDERS
-import API
 
-ethSMSPrice = API.ethPriceReport()['priceETH']
-ethSMSPrice = round(ethSMSPrice, 2)
-ethSMSPercentChangeDaily = API.ethPriceReport()['percentChangeDAILY']
-ethSMSPercentChangeDaily = round(ethSMSPercentChangeDaily, 2)
-ethSMSPercentChangeHourly = API.ethPriceReport()['percentChangeHRLY']
-ethSMSPercentChangeHourly = round(ethSMSPercentChangeHourly, 2)
 
 def send_sms_via_email(
     number: str,
@@ -31,27 +24,33 @@ def send_sms_via_email(
 
 
 
-def main():
-    number = "8045479964"
-    message = "The Etherium price is " + str(ethSMSPrice) + " , It Has gone up " + str(ethSMSPercentChangeDaily) + " percent in the last day"
-    provider = "T-Mobile"
+def priceReportDOWN(ethSMSPercentChangeHourly, ethSMSPrice):
+    ethSMSPercentChangeHourly /= 100
+    ethSMSPercentChangeHourly = round(ethSMSPercentChangeHourly, 2)
+    ethSMSPrice = round(ethSMSPrice, 2)
 
-    sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
-
-
-
-    send_sms_via_email(number, message, provider, sender_credentials)
-
-def priceReportDOWN():
     number = '8045479964'
-    message = "Etherium has gown down from" + str((1+ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + ")"
+    message = "Etherium has gown down from " + str((1+ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
     provider = "T-Mobile"
 
     sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
 
     send_sms_via_email(number, message, provider, sender_credentials)
 
-if __name__ == "__main__":
+    return "sent!"
 
-    main()
-    priceReportDOWN()
+def priceReportUP(ethSMSPercentChangeHourly, ethSMSPrice):
+    ethSMSPercentChangeHourly /= 100
+    ethSMSPercentChangeHourly = round(ethSMSPercentChangeHourly, 2)
+    ethSMSPrice = round(ethSMSPrice, 2)
+
+    number = '8045479964'
+    message = "Etherium has gone up from " + str((1-ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
+    provider = "T-Mobile"
+
+    sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
+
+    send_sms_via_email(number, message, provider, sender_credentials)
+
+    return "sent!"
+

@@ -3,6 +3,8 @@ import json
 import time
 import itertools
 
+import sendMessages as SMS
+
 #HELLO
 
 url = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest' #URL of the data api
@@ -17,7 +19,7 @@ headers = {
     'X-CMC_PRO_API_KEY' : '81a0d3ef-430f-4b71-83e9-5b8ca264301d' #the key the coinmarketcap gives to acces date; essentially a password
 }
 
-delayBetweenRequests = 300
+delayBetweenRequests = 60
 
 session = Session() #saves information like cookies and saves time
 session.headers.update(headers) #passess in the required information to the api
@@ -42,10 +44,15 @@ def ethPriceReport():
     return priceReportETH
 
 
-"""
+
 for x in itertools.repeat([]): #Infinite Loop to get
-    time.sleep(delayBetweenRequests) #delay between requests
-    print(ethPriceReport()['priceETH'])
-"""
+    if (ethPriceReport()['percentChangeHRLY'] > 0.01):
+        print(ethPriceReport()['percentChangeHRLY'])
+        SMS.priceReportUP(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
+    if (ethPriceReport()['percentChangeHRLY'] < 0.01):
+        print(ethPriceReport()['percentChangeHRLY'])
+        SMS.priceReportDOWN(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
+    time.sleep(delayBetweenRequests)  # delay between requests
+
 
 
