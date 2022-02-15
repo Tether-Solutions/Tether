@@ -37,7 +37,7 @@ def ethPriceGetter():
 print(ethPriceGetter())
 
 for x in itertools.repeat([]): #Infinite Loop to get
-    time.sleep(delayBetweenRequests)
+    time.sleep(delayBetweenRequests) #delay between requests
     response = session.get(url, params=parameters)
     print(ethPriceGetter())
 
