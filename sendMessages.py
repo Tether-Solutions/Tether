@@ -1,6 +1,8 @@
 import email, smtplib, ssl
 from providers import PROVIDERS
 
+import time
+
 
 def send_sms_via_email(
     number: str,
@@ -21,16 +23,6 @@ def send_sms_via_email(
     ) as email:
         email.login(sender_email, email_password)
         email.sendmail(sender_email, receiver_email, email_message)
-
-
-def main():
-    number = '8042456976'
-    message = "sup"
-    provider = "T-Mobile"
-
-    sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
-
-    send_sms_via_email(number, message, provider, sender_credentials)
 
 
 def priceReportDOWN(ethSMSPercentChangeHourly, ethSMSPrice):
@@ -64,4 +56,4 @@ def priceReportUP(ethSMSPercentChangeHourly, ethSMSPrice):
     return "sent!"
 
 
-main()
+

@@ -4,7 +4,7 @@ import time
 import itertools
 
 import sendMessages as SMS
-import basicBotV1 as bot
+
 
 #HELLO
 
@@ -21,7 +21,7 @@ headers = {
 }
 
 delayBetweenRequests = 60
-percentageThreshold = 2
+percentageThreshold = 0.02
 
 session = Session() #saves information like cookies and saves time
 session.headers.update(headers) #passess in the required information to the api
@@ -46,15 +46,16 @@ def ethPriceReport():
     return priceReportETH
 
 
+#for x in itertools.repeat([]): #Infinite Loop to get
+  #  if (ethPriceReport()['percentChangeHRLY'] > percentageThreshold):
+  #      SMS.priceReportUP(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
+  #  if (ethPriceReport()['percentChangeHRLY'] < -percentageThreshold):
+  #      SMS.priceReportDOWN(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
+  #  time.sleep(delayBetweenRequests)  # delay between requests
 
-for x in itertools.repeat([]): #Infinite Loop to get
-    if (ethPriceReport()['percentChangeHRLY'] > percentageThreshold):
-        #SMS.priceReportUP(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
-        bot.liquidate(ethPriceReport()['priceETH'])
-    if (ethPriceReport()['percentChangeHRLY'] < -percentageThreshold):
-        #SMS.priceReportDOWN(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
-        bot.buyDip(ethPriceReport()['priceETH'])
-    time.sleep(delayBetweenRequests)  # delay between requests
+
+
+
 
 
 
