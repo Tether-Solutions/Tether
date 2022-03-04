@@ -2,28 +2,35 @@ import time
 import itertools
 from API import ethPriceReport
 import csv
+import pandas as pd
 
 ethPrice = ethPriceReport()['priceETH']
 seconds = time.time()
 
 
 
-def logger(sec, eth, usd, percentChange):
-    with open('priceDataCsv.csv', 'w', newline='') as f:
+def logger(sec, eth, usd):
+    with open('priceData.csv', 'w', newline='') as f:
         fieldnames = ['time', 'ethReserve', 'usdReserve']
         thewriter = csv.DictWriter(f, fieldnames=fieldnames)
 
-        currentTime = time.ctime(sec)
+
 
         thewriter.writeheader()
-        thewriter.writerow({'time' : currentTime,'ethReserve' : eth, 'usdReserve' : usd)
+        thewriter.writerow({'time' : sec,'ethReserve' : eth, 'usdReserve' : usd})
 
 def reader():
-    with open('priceDataCsv.csv', 'r') as f:
+    #df = pd.read_csv('priceData.csv', header=0)
+
+    #print(df)
+
+    with open('priceData.csv', 'r') as f:
         reader = csv.DictReader(f)
 
+        
         allLines = list(reader)
-        latestLine = allLines[-1]
+        print(allLines)
+        latestLine = allLines[0]
 
         ethReserves = latestLine['ethReserve']
         usdReserves = latestLine['usdReserve']
@@ -38,15 +45,9 @@ def reader():
 
 
 
-
-
-
-
-
-
-def liquidate(seconds):
-    simulationETH = reader()['ethRes']
-    simulationUSD = reader()['usdRes']
+def liquidate(seconds, amountToConvert):
+    simulationETH = float(reader()['ethRes'])
+    simulationUSD = float(reader()['usdRes'])
 
     simulationETH -= amountToConvert
     simulationUSD += (amountToConvert * ethPrice)
@@ -56,9 +57,9 @@ def liquidate(seconds):
     logger(secs, simulationETH, simulationUSD)
 
 
-def buyDip():
-    simulationETH = reader()['ethRes']
-    simulationUSD = reader()['usdRes']
+def buyDip(seconds, amountToConvert):
+    simulationETH = float(reader()['ethRes'])
+    simulationUSD = float(reader()['usdRes'])
 
     simulationETH += amountToConvert
     simulationUSD -= (amountToConvert * ethPrice)
@@ -69,14 +70,18 @@ def buyDip():
 
 
 
-print("Check Check")
-'''
+
+
 for x in itertools.repeat([]):
-    if (ethPriceReport()['percentChangeHRLY'] > 0.2):
-
+    if (ethPriceReport()['percentChangeHRLY'] > 0.02):
         seconds = time.time()
-    elif (ethPriceReport()['percentChangeHRLY'] < -0.2):
-
+        liquidate(seconds, 0.25)
+        print("Liquidated!")
+    elif (ethPriceReport()['percentChangeHRLY'] < -0.02):
         seconds = time.time()
+        buyDip(seconds, 0.25)
+        print("bought dip")
+    else:
+        print("No trades happened in the last 2 minutes")
+        print(ethPriceReport()['percentChangeHRLY'])
     time.sleep(120)
-'''
