@@ -10,13 +10,13 @@ seconds = time.time()
 
 
 def logger(sec, eth, usd):
-    with open('priceData.csv', 'w', newline='') as f:
+    with open('priceData.csv', 'a', newline='\n') as f:
         fieldnames = ['time', 'ethReserve', 'usdReserve']
         thewriter = csv.DictWriter(f, fieldnames=fieldnames)
 
 
 
-        thewriter.writeheader()
+        #thewriter.writeheader()
         thewriter.writerow({'time' : sec,'ethReserve' : eth, 'usdReserve' : usd})
 
 def reader():
@@ -30,7 +30,7 @@ def reader():
         
         allLines = list(reader)
         print(allLines)
-        latestLine = allLines[0]
+        latestLine = allLines[-1]
 
         ethReserves = latestLine['ethReserve']
         usdReserves = latestLine['usdReserve']
@@ -46,15 +46,17 @@ def reader():
 
 
 def liquidate(seconds, amountToConvert):
-    simulationETH = float(reader()['ethRes'])
-    simulationUSD = float(reader()['usdRes'])
+    currentPrice = float(reader()['ethRes'])
+    if (currentPrice > 0.25):
+        simulationETH = float(reader()['ethRes'])
+        simulationUSD = float(reader()['usdRes'])
 
-    simulationETH -= amountToConvert
-    simulationUSD += (amountToConvert * ethPrice)
+        simulationETH -= amountToConvert
+        simulationUSD += (amountToConvert * ethPrice)
 
-    time.time()
-    secs = time.ctime(seconds)
-    logger(secs, simulationETH, simulationUSD)
+        time.time()
+        secs = time.ctime(seconds)
+        logger(secs, simulationETH, simulationUSD)
 
 
 def buyDip(seconds, amountToConvert):
