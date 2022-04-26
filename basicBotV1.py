@@ -46,33 +46,35 @@ def reader():
 
 
 def liquidate(seconds, amountToConvert):
-    currentPrice = float(reader()['ethRes'])
-    if (currentPrice > 0.25):
-        simulationETH = float(reader()['ethRes'])
-        simulationUSD = float(reader()['usdRes'])
+    if simulationETH > 0:
+        currentPrice = float(reader()['ethRes'])
+        if (currentPrice > 0.25):
+            simulationETH = float(reader()['ethRes'])
+            simulationUSD = float(reader()['usdRes'])
 
-        simulationETH -= amountToConvert
-        simulationUSD += (amountToConvert * ethPrice)
+            simulationETH -= amountToConvert
+            simulationUSD += (amountToConvert * ethPrice)
 
-        time.time()
-        secs = time.ctime(seconds)
-        logger(secs, simulationETH, simulationUSD)
+            time.time()
+            secs = time.ctime(seconds)
+            logger(secs, simulationETH, simulationUSD)
 
 
 def buyDip(seconds, amountToConvert):
-    simulationETH = float(reader()['ethRes'])
-    simulationUSD = float(reader()['usdRes'])
+    if (sumlationUSD > 0):
+        simulationETH = float(reader()['ethRes'])
+        simulationUSD = float(reader()['usdRes'])
 
-    simulationETH += amountToConvert
-    simulationUSD -= (amountToConvert * ethPrice)
+        simulationETH += amountToConvert
+        simulationUSD -= (amountToConvert * ethPrice)
 
-    time.time()
-    secs = time.ctime(seconds)
-    logger(seconds, simulationETH, simulationUSD)
-
-
+        time.time()
+        secs = time.ctime(seconds)
+        logger(seconds, simulationETH, simulationUSD)
 
 
+
+print("Running!")
 
 for x in itertools.repeat([]):
     if (ethPriceReport()['percentChangeHRLY'] > 0.02):
@@ -86,4 +88,4 @@ for x in itertools.repeat([]):
     else:
         print("No trades happened in the last 2 minutes")
         print(ethPriceReport()['percentChangeHRLY'])
-    time.sleep(120)
+    time.sleep(900)
