@@ -46,7 +46,7 @@ def priceReportUP(ethSMSPercentChangeHourly, ethSMSPrice):
     ethSMSPrice = round(ethSMSPrice, 2)
 
     number = '8045479964'
-    message = "Ethereum has gone up from " + str((1-ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
+    message = "Ethereum has gone up from " #+ str((1-ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
     provider = "T-Mobile"
 
     sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
