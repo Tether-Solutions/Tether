@@ -21,7 +21,8 @@ headers = {
 }
 
 delayBetweenRequests = 60
-percentageThreshold = 0.02
+percentageThreshold = 0
+BigAlert = 10
 
 session = Session() #saves information like cookies and saves time
 session.headers.update(headers) #passess in the required information to the api
@@ -44,14 +45,18 @@ def ethPriceReport():
         'percentChangeWEEKLY': ethPercentChangeWeekly,
     }
     return priceReportETH
+  
 
 
-#for x in itertools.repeat([]): #Infinite Loop to get
-  #  if (ethPriceReport()['percentChangeHRLY'] > percentageThreshold):
-  #      SMS.priceReportUP(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
-  #  if (ethPriceReport()['percentChangeHRLY'] < -percentageThreshold):
-  #      SMS.priceReportDOWN(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
-  #  time.sleep(delayBetweenRequests)  # delay between requests
+for x in itertools.repeat([]): #Infinite Loop to get  
+  
+  if (ethPriceReport()['percentChangeHRLY'] > percentageThreshold):
+    SMS.priceReportUP(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
+  if (ethPriceReport()['percentChangeHRLY'] < -percentageThreshold):
+    SMS.priceReportDOWN(ethPriceReport()    ['percentChangeHRLY'], ethPriceReport()['priceETH'])
+    time.sleep(delayBetweenRequests)  # delay between requests
+
+
 
 
 

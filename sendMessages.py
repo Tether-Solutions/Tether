@@ -9,7 +9,7 @@ def send_sms_via_email(
     message: str,
     provider: str,
     sender_credentials: tuple,
-    subject: str = "Hi! Its Crypto Bot!",
+    subject: str = "Hi! It's Crypto Bot! By Aaryan and Yuvanesh",
     smtp_server: str = "smtp.gmail.com",
     smtp_port: int = 465,
 ):
@@ -30,8 +30,8 @@ def priceReportDOWN(ethSMSPercentChangeHourly, ethSMSPrice):
     ethSMSPercentChangeHourly = round(ethSMSPercentChangeHourly, 2)
     ethSMSPrice = round(ethSMSPrice, 2)
 
-    number = '8045479964'
-    message = "Ethereum has gown down from " + str((1+ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
+    number = '8042456976'
+    message = " Ethereum has gown down from " + str((1-ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
     provider = "T-Mobile"
 
     sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
@@ -45,8 +45,8 @@ def priceReportUP(ethSMSPercentChangeHourly, ethSMSPrice):
     ethSMSPercentChangeHourly = round(ethSMSPercentChangeHourly, 2)
     ethSMSPrice = round(ethSMSPrice, 2)
 
-    number = '8045479964'
-    message = "Ethereum has gone up from " #+ str((1-ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
+    number = '8042456976'
+    message = " Ethereum has gone up from " + str((1+ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour the percent change is(" + str(ethSMSPercentChangeHourly) + "%)"
     provider = "T-Mobile"
 
     sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
@@ -55,5 +55,12 @@ def priceReportUP(ethSMSPercentChangeHourly, ethSMSPrice):
 
     return "sent!"
 
+def test_function():
+  number = '8049384004'
+  message = ""
+  provider = "AT&T"
+  sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
+
+  send_sms_via_email(number, message, provider, sender_credentials)
 
 
