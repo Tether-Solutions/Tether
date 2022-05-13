@@ -9,7 +9,7 @@ def send_sms_via_email(
     message: str,
     provider: str,
     sender_credentials: tuple,
-    subject: str = "Hi! It's Crypto Bot! By Aaryan and Yuvanesh",
+    subject: str = "Hi! It's Crypto Bot!",
     smtp_server: str = "smtp.gmail.com",
     smtp_port: int = 465,
 ):
@@ -26,19 +26,18 @@ def send_sms_via_email(
 
 
 def priceReportDOWN(ethSMSPercentChangeHourly, ethSMSPrice):
-    ethSMSPercentChangeHourly /= 100
+    ethSMSPercentChangeHourly = round(ethSMSPercentChangeHourly/100, 2)
     ethSMSPercentChangeHourly = round(ethSMSPercentChangeHourly, 2)
     ethSMSPrice = round(ethSMSPrice, 2)
 
     number = '8042456976'
-    message = " Ethereum has gown down from " + str((1-ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
+    messagev2 = "Ethereum has gown down from " + str((1-ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
     provider = "T-Mobile"
-
     sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
 
-    send_sms_via_email(number, message, provider, sender_credentials)
+    send_sms_via_email(number, messagev2 , provider, sender_credentials)
 
-    return "sent!"
+    
 
 def priceReportUP(ethSMSPercentChangeHourly, ethSMSPrice):
     ethSMSPercentChangeHourly /= 100
@@ -46,21 +45,9 @@ def priceReportUP(ethSMSPercentChangeHourly, ethSMSPrice):
     ethSMSPrice = round(ethSMSPrice, 2)
 
     number = '8042456976'
-    message = " Ethereum has gone up from " + str((1+ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour the percent change is(" + str(ethSMSPercentChangeHourly) + "%)"
+    messagev3 = " Ethereum has gone up from " + str((1+ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour the percent change is(" + str(ethSMSPercentChangeHourly) + "%)"
     provider = "T-Mobile"
-
     sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
 
     send_sms_via_email(number, message, provider, sender_credentials)
-
-    return "sent!"
-
-def test_function():
-  number = '8049384004'
-  message = ""
-  provider = "AT&T"
-  sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
-
-  send_sms_via_email(number, message, provider, sender_credentials)
-
 

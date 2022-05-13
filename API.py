@@ -5,6 +5,7 @@ import itertools
 
 import sendMessages as SMS
 
+#https://coinmarketcap.com/api/documentation/v1/#operation/getV2CryptocurrencyQuotesLatest
 
 #HELLO
 
@@ -48,19 +49,9 @@ def ethPriceReport():
   
 
 
-for x in itertools.repeat([]): #Infinite Loop to get  
-  
+for x in itertools.repeat([]): #Infinite Loop  
   if (ethPriceReport()['percentChangeHRLY'] > percentageThreshold):
-    SMS.priceReportUP(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
-  if (ethPriceReport()['percentChangeHRLY'] < -percentageThreshold):
+    SMS.priceReportUP(ethPriceReport()        ['percentChangeHRLY'], ethPriceReport()['priceETH'])
+  if (ethPriceReport()['percentChangeHRLY'] < percentageThreshold):
     SMS.priceReportDOWN(ethPriceReport()    ['percentChangeHRLY'], ethPriceReport()['priceETH'])
-    time.sleep(delayBetweenRequests)  # delay between requests
-
-
-
-
-
-
-
-
-
+  time.sleep(delayBetweenRequests)  # delay between requests
