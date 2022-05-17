@@ -3,6 +3,7 @@ import itertools
 from API import ethPriceReport
 import csv
 import pandas as pd
+import os
 
 ethPrice = ethPriceReport()['priceETH']
 seconds = time.time()
@@ -29,7 +30,7 @@ def reader():
 
         
         allLines = list(reader)
-        print(allLines)
+        #print(allLines)
         latestLine = allLines[-1]
 
         ethReserves = latestLine['ethReserve']
@@ -40,52 +41,54 @@ def reader():
             'usdRes' : usdReserves
         }
 
-        return returnDictionary
+    return returnDictionary
 
+def transactionMaker(transactionType, cryptoUsdPair):
+    if(transactionType == 1):
+        print("Buy Order Initiated")
 
+        simulationETH = reader()['ethRes']
+        simulationUSD = reader()['usdRes']
 
+        simulationUSD = float(simulationUSD)
+        simulationETH = float(simulationETH)
 
-def liquidate(seconds, amountToConvert):
-    if simulationETH > 0:
-        currentPrice = float(reader()['ethRes'])
-        if (currentPrice > 0.25):
-            simulationETH = float(reader()['ethRes'])
-            simulationUSD = float(reader()['usdRes'])
+        # print(simulationETH) Test Prints
+        # print(simulationUSD)
+        # print(type(cryptoUsdPair))
 
-            simulationETH -= amountToConvert
-            simulationUSD += (amountToConvert * ethPrice)
+        if(simulationUSD >= (0.25 * cryptoUsdPair)):
+            simulationUSD -= (0.25 * cryptoUsdPair)
+            simulationETH += 0.25
 
-            time.time()
-            secs = time.ctime(seconds)
-            logger(secs, simulationETH, simulationUSD)
+            logger(seconds, simulationETH, round(simulationUSD, 3))
+        else:
+            print("There were not enough funds(USD) to make the transaction")
 
+    elif(transactionType == 2):
+        print("Sell Order Initiated")
 
-def buyDip(seconds, amountToConvert):
-    if (sumlationUSD > 0):
-        simulationETH = float(reader()['ethRes'])
-        simulationUSD = float(reader()['usdRes'])
+        simulationETH = reader()['ethRes']
+        simulationUSD = reader()['usdRes']
 
-        simulationETH += amountToConvert
-        simulationUSD -= (amountToConvert * ethPrice)
+        simulationUSD = float(simulationUSD)
+        simulationETH = float(simulationETH)
 
-        time.time()
-        secs = time.ctime(seconds)
-        logger(seconds, simulationETH, simulationUSD)
+        # print(simulationETH) Testing Prints
+        # print(simulationUSD)
+        # print(cryptoUsdPair)
 
+        if(simulationETH >= 0.25):
+            simulationUSD += (0.25 * cryptoUsdPair)
+            simulationETH -= 0.25
 
+            logger(seconds, simulationETH, round(simulationUSD, 3))
+        else:
+            print("There were not enough funds(ETH) to make the transcation")
 
-print("Running!")
+def interface():
+    print("Starting bot script")
+    startUpInput = input("Would you like to start the automation process (Y / N)").lower()
 
-for x in itertools.repeat([]):
-    if (ethPriceReport()['percentChangeHRLY'] > 0.02):
-        seconds = time.time()
-        liquidate(seconds, 0.25)
-        print("Liquidated!")
-    elif (ethPriceReport()['percentChangeHRLY'] < -0.02):
-        seconds = time.time()
-        buyDip(seconds, 0.25)
-        print("bought dip")
-    else:
-        print("No trades happened in the last 2 minutes")
-        print(ethPriceReport()['percentChangeHRLY'])
-    time.sleep(900)
+    if (startUpInput in ['y', 'yes']):
+        thresholdInput = int(input("What is the percentage threshold for making purchases(enter integers, e.x 1, 2, -1, -2 ... ) "))

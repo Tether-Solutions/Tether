@@ -1,15 +1,13 @@
 import email, smtplib, ssl
 from providers import PROVIDERS
-
 import time
-
 
 def send_sms_via_email(
     number: str,
     message: str,
     provider: str,
     sender_credentials: tuple,
-    subject: str = "Hi! It's Crypto Bot!",
+    subject: str = "Hi! Its Crypto Bot!",
     smtp_server: str = "smtp.gmail.com",
     smtp_port: int = 465,
 ):
@@ -25,29 +23,40 @@ def send_sms_via_email(
         email.sendmail(sender_email, receiver_email, email_message)
 
 
-def priceReportDOWN(ethSMSPercentChangeHourly, ethSMSPrice):
-    ethSMSPercentChangeHourly = round(ethSMSPercentChangeHourly/100, 2)
-    ethSMSPercentChangeHourly = round(ethSMSPercentChangeHourly, 2)
-    ethSMSPrice = round(ethSMSPrice, 2)
 
-    number = '8042456976'
-    messagev2 = "Ethereum has gown down from " + str((1-ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour(" + str(ethSMSPercentChangeHourly) + "%)"
+
+def priceReportDOWN(ethSMSPercentChangeHourly, currentPrice, number): #Sends message detailing the negative percent change in ETH price
+    ethSMSPercentChangeHourly /= 100 # Converting whole number into decimal
+    ethSMSPercentChangeHourly = round(ethSMSPercentChangeHourly, 2) #Round the percent change to two decimal places 
+    currentPrice = round(currentPrice, 2) # round current price 
+
+    previousHourPrice = round(1+ethSMSPercentChangeHourly, 2)
+  
+    message = "Ethereum has gown down from " + str(previousHourPrice * currentPrice) + " to " + str(currentPrice) + " in the last hour (" + str(ethSMSPercentChangeHourly) + "%)"
     provider = "T-Mobile"
-    sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
 
-    send_sms_via_email(number, messagev2 , provider, sender_credentials)
-
-    
-
-def priceReportUP(ethSMSPercentChangeHourly, ethSMSPrice):
-    ethSMSPercentChangeHourly /= 100
-    ethSMSPercentChangeHourly = round(ethSMSPercentChangeHourly, 2)
-    ethSMSPrice = round(ethSMSPrice, 2)
-
-    number = '8042456976'
-    messagev3 = " Ethereum has gone up from " + str((1+ethSMSPercentChangeHourly) * ethSMSPrice) + " to " + str(ethSMSPrice) + " in the last hour the percent change is(" + str(ethSMSPercentChangeHourly) + "%)"
-    provider = "T-Mobile"
     sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
 
     send_sms_via_email(number, message, provider, sender_credentials)
 
+    
+
+
+def priceReportUP(ethSMSPercentChangeHourly, currentPrice, number): #Sends message detailing the positive percent change in ETH price
+    
+    ethSMSPercentChangeHourly /= 100 # Converting whole number into decimal
+    ethSMSPercentChangeHourly = round(ethSMSPercentChangeHourly, 2) #Round the percent change to two decimal
+    currentPrice = round(currentPrice, 2)
+
+    previousHourPrice = round(1-ethSMSPercentChangeHourly, 2)
+  
+    #number = '8042456976'
+    message = "Ethereum has gone up from " + str(previousHourPrice * currentPrice) + " to " + str(currentPrice) + " in the last hour (" + str(ethSMSPercentChangeHourly) + "%)"
+    
+    provider = "T-Mobile"
+
+    sender_credentials = ("cryptoanalyzerapikey@gmail.com", "nrcdalqekjkujvxp")
+
+    send_sms_via_email(number, message, provider, sender_credentials)
+
+  

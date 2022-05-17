@@ -5,7 +5,7 @@ import itertools
 
 import sendMessages as SMS
 
-numberList = ["8045479964", "8042456976"]
+#https://coinmarketcap.com/api/documentation/v1/#operation/getV2CryptocurrencyQuotesLatest
 
 #HELLO
 
@@ -22,7 +22,7 @@ headers = {
 }
 
 delayBetweenRequests = 60
-percentageThreshold = 0.02
+BigAlert = 0.1
 
 session = Session() #saves information like cookies and saves time
 session.headers.update(headers) #passess in the required information to the api
@@ -43,18 +43,15 @@ def ethPriceReport():
         'percentChangeHRLY' : ethPercentChangeHourly,
         'percentChangeDAILY' : ethPercentChangeDaily,
         'percentChangeWEEKLY': ethPercentChangeWeekly,
+          
     }
     return priceReportETH
 
 
-for x in itertools.repeat([]): #Infinite Loop
-    if (ethPriceReport()['percentChangeHRLY'] > percentageThreshold):
-      for number in numberList: #iterates through numberList sending the message to each number 
-        SMS.priceReportUP(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'], number)
-        print("Sent Price Report UP")
-        
-    if (ethPriceReport()['percentChangeHRLY'] < -percentageThreshold):
-      for number in numberList:
-        SMS.priceReportDOWN(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'], number)
-        print("Sent Price Report Down")
-    time.sleep(delayBetweenRequests)  # delay between requests
+
+for x in itertools.repeat([]): #Infinite Loop  
+  if (ethPriceReport()['percentChangeWEEKLY'] > BigAlert):
+    SMS.priceReportMajorUP(ethPriceReport()        ['percentChangeWEEKLY'], ethPriceReport()['priceETH'])
+  if (ethPriceReport()['percentChangeWEEKLY'] < BigAlert):
+    SMS.priceReportMajorDOWN(ethPriceReport()    ['percentChangeWEEKLY'], ethPriceReport()['priceETH'])
+  time.sleep(delayBetweenRequests)  # delay between requests
