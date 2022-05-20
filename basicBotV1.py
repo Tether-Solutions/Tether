@@ -3,8 +3,9 @@ import itertools
 from API import ethPriceReport
 import csv
 import pandas as pd
+import os
 
-ethPrice = ethPriceReport()['priceETH']
+
 seconds = time.time()
 
 
@@ -29,7 +30,7 @@ def reader():
 
         
         allLines = list(reader)
-        print(allLines)
+        #print(allLines)
         latestLine = allLines[-1]
 
         ethReserves = latestLine['ethReserve']
@@ -40,52 +41,71 @@ def reader():
             'usdRes' : usdReserves
         }
 
-        return returnDictionary
+    return returnDictionary
+
+def transactionMaker(transactionType, cryptoUsdPair):
+    if(transactionType == 1):
+        print("Buy Order Initiated")
+
+        simulationETH = reader()['ethRes']
+        simulationUSD = reader()['usdRes']
+
+        simulationUSD = float(simulationUSD)
+        simulationETH = float(simulationETH)
+
+        # print(simulationETH) Test Prints
+        # print(simulationUSD)
+        # print(type(cryptoUsdPair))
+
+        if(simulationUSD >= (0.25 * cryptoUsdPair)):
+            simulationUSD -= (0.25 * cryptoUsdPair)
+            simulationETH += 0.25
+
+            logger(seconds, simulationETH, round(simulationUSD, 3))
+        else:
+            print("There were not enough funds(USD) to make the transaction")
+
+    elif(transactionType == 2):
+        print("Sell Order Initiated")
+
+        simulationETH = reader()['ethRes']
+        simulationUSD = reader()['usdRes']
+
+        simulationUSD = float(simulationUSD)
+        simulationETH = float(simulationETH)
+
+        # print(simulationETH) Testing Prints
+        # print(simulationUSD)
+        # print(cryptoUsdPair)
+
+        if(simulationETH >= 0.25):
+            simulationUSD += (0.25 * cryptoUsdPair)
+            simulationETH -= 0.25
+
+            logger(seconds, simulationETH, round(simulationUSD, 3))
+        else:
+            print("There were not enough funds(ETH) to make the transcation")
+
+def interface():
+    print("Starting bot script")
+    startUpInput = input("Would you like to start the automation process (Y / N)").lower()
+
+    if (startUpInput in ['y', 'yes']):
+        thresholdInput = int(input("What is the percentage threshold for making purchases(enter integers, e.x 1, 2, -1, -2 ... ) "))
+
+        print("Starting up loop")
+
+        confirmationInput = input("Are you sure you want to continue to the infinite loop?( Y / N )")
+
+        if (confirmationInput in ['y', 'yes']):
+            for x in itertools.repeat([]):
+                ethPrice = ethPriceReport()['priceETH']
+                ethPricePercentChange = ethPriceReport()['percentChangeHRLY']
+
+                if(ethPricePercentChange >= thresholdInput):
+                    transactionMaker(2, ethPrice)
+                elif(ethPricePercentChange <= -thresholdInput):
+                    transactionMaker(1, ethPrice)
 
 
-
-
-def liquidate(seconds, amountToConvert):
-    if simulationETH > 0:
-        currentPrice = float(reader()['ethRes'])
-        if (currentPrice > 0.25):
-            simulationETH = float(reader()['ethRes'])
-            simulationUSD = float(reader()['usdRes'])
-
-            simulationETH -= amountToConvert
-            simulationUSD += (amountToConvert * ethPrice)
-
-            time.time()
-            secs = time.ctime(seconds)
-            logger(secs, simulationETH, simulationUSD)
-
-
-def buyDip(seconds, amountToConvert):
-    if (sumlationUSD > 0):
-        simulationETH = float(reader()['ethRes'])
-        simulationUSD = float(reader()['usdRes'])
-
-        simulationETH += amountToConvert
-        simulationUSD -= (amountToConvert * ethPrice)
-
-        time.time()
-        secs = time.ctime(seconds)
-        logger(seconds, simulationETH, simulationUSD)
-
-
-
-print("Running!")
-
-for x in itertools.repeat([]):
-    if (ethPriceReport()['percentChangeHRLY'] > 0.02):
-        seconds = time.time()
-        liquidate(seconds, 0.25)
-        print("Liquidated!")
-    elif (ethPriceReport()['percentChangeHRLY'] < -0.02):
-        seconds = time.time()
-        buyDip(seconds, 0.25)
-        print("bought dip")
-    else:
-        print("No trades happened in the last 2 minutes")
-        print(ethPriceReport()['percentChangeHRLY'])
-    time.sleep(900)
+interface()
