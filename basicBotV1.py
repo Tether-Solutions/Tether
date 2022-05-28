@@ -2,10 +2,11 @@ import time
 import itertools
 from API import ethPriceReport
 import csv
-import pandas as pd
+#import pandas as pd
 import os
 
 ethPrice = ethPriceReport()['priceETH']
+ethPricePercentChange = ethPriceReport()['percentChangeHRLY']
 seconds = time.time()
 
 
@@ -87,8 +88,24 @@ def transactionMaker(transactionType, cryptoUsdPair):
             print("There were not enough funds(ETH) to make the transcation")
 
 def interface():
-    print("Starting bot script")
-    startUpInput = input("Would you like to start the automation process (Y / N)").lower()
+  print("Starting bot script")
+  startUpInput = input("Would you like to start the automation process (Y / N)").lower()
 
-    if (startUpInput in ['y', 'yes']):
-        thresholdInput = int(input("What is the percentage threshold for making purchases(enter integers, e.x 1, 2, -1, -2 ... ) "))
+  if (startUpInput in ['y', 'yes']):
+      thresholdInput = int(input("What is the percentage threshold for making purchases(enter integers, e.x 1, 2, -1, -2 ... ) "))
+
+      for x in itertools.repeat([]):
+        if(ethPricePercentChange > (thresholdInput/100)):
+          transactionMaker(2, ethPrice)
+        elif(ethPricePercentChange < -(thresholdInput/100)):
+          transactionMaker(1, ethPrice)
+        time.sleep(60)
+  elif (startUpInput in ['n', 'no']):
+    print("Goodbye! ")
+    return
+  else:
+    print("Invalid Input!")
+    interface()
+
+
+interface()

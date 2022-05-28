@@ -1,3 +1,5 @@
+# Yuvanesh Anand Page
+
 from requests import Request, Session
 import json
 import time
@@ -5,9 +7,10 @@ import itertools
 
 import sendMessages as SMS
 
-numberList = ["8045479964", "8042456976"]
+numberList = ["8042456976", "8045479964"]
+#providerList = ["T-Mobile", "Verizon", "AT&T"]
 
-#HELLO
+
 
 url = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest' #URL of the data api
 
@@ -21,8 +24,8 @@ headers = {
     'X-CMC_PRO_API_KEY' : '81a0d3ef-430f-4b71-83e9-5b8ca264301d' #the key the coinmarketcap gives to acces date; essentially a password
 }
 
-delayBetweenRequests = 60
-percentageThreshold = 0.02
+delayBetweenRequests = 30
+percentageThreshold = 0
 
 session = Session() #saves information like cookies and saves time
 session.headers.update(headers) #passess in the required information to the api
@@ -47,14 +50,26 @@ def ethPriceReport():
     return priceReportETH
 
 
-for x in itertools.repeat([]): #Infinite Loop
+
+
+def forLoop():
+  for x in itertools.repeat([]): #Infinite Loop
     if (ethPriceReport()['percentChangeHRLY'] > percentageThreshold):
       for number in numberList: #iterates through numberList sending the message to each number 
         SMS.priceReportUP(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'], number)
         print("Sent Price Report UP")
-        
+          
     if (ethPriceReport()['percentChangeHRLY'] < -percentageThreshold):
       for number in numberList:
-        SMS.priceReportDOWN(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'], number)
-        print("Sent Price Report Down")
+          SMS.priceReportDOWN(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'], number)
+          print(ethPriceReport()['percentChangeHRLY'])
+          print("Sent Price Report Down")
     time.sleep(delayBetweenRequests)  # delay between requests
+
+
+
+
+ 
+if __name__ == "__main__":
+  forLoop()
+  
