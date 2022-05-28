@@ -50,6 +50,16 @@ def ethPriceReport():
     return priceReportETH
 
 
+<<<<<<< HEAD
+=======
+for x in itertools.repeat([]): #Infinite Loop to get
+    if (ethPriceReport()['percentChangeHRLY'] > percentageThreshold):
+        SMS.priceReportUP(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
+    if (ethPriceReport()['percentChangeHRLY'] < -percentageThreshold):
+        SMS.priceReportDOWN(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
+    time.sleep(delayBetweenRequests)  # delay between requests
+
+>>>>>>> origin/main
 
 
 def forLoop():
