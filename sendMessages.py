@@ -3,7 +3,7 @@
 import email, smtplib, ssl
 from providers import PROVIDERS
 import time
-from API import ethPriceReport
+from API2 import ethPriceReport
 
 def send_sms_via_email(
     number: str,

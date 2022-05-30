@@ -4,7 +4,7 @@ from requests import Request, Session
 import json
 import time
 import itertools
-import sendMessages as SMS
+
 
 numberList = ["8042456976", "8045479964"]
 #providerList = ["T-Mobile", "Verizon", "AT&T"]
@@ -47,38 +47,3 @@ def ethPriceReport():
         'percentChangeWEEKLY': ethPercentChangeWeekly,
     }
     return priceReportETH
-
-
-
-'''
-for x in itertools.repeat([]): #Infinite Loop to get
-    if (ethPriceReport()['percentChangeHRLY'] > percentageThreshold):
-        SMS.priceReportUP(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'], number)
-    if (ethPriceReport()['percentChangeHRLY'] < -percentageThreshold):
-        SMS.priceReportDOWN(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'])
-    time.sleep(delayBetweenRequests)  # delay between requests
-'''
-
-
-
-def forLoop():
-  for x in itertools.repeat([]): #Infinite Loop
-    if (ethPriceReport()['percentChangeHRLY'] > percentageThreshold):
-      for number in numberList: #iterates through numberList sending the message to each number 
-        SMS.priceReportUP(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'], number)
-        print("Sent Price Report UP")
-          
-    if (ethPriceReport()['percentChangeHRLY'] < -percentageThreshold):
-      for number in numberList:
-          SMS.priceReportDOWN(ethPriceReport()['percentChangeHRLY'], ethPriceReport()['priceETH'], number)
-          print(ethPriceReport()['percentChangeHRLY'])
-          print("Sent Price Report Down")
-    time.sleep(delayBetweenRequests)  # delay between requests
-
-
-
-
- 
-if __name__ == "__main__":
-  forLoop()
-  
