@@ -13,7 +13,7 @@ setup(
         'email',
         'smtp',
         'ssl',
-        'time',
+        'datetime',
         'requests',
         'json',
         'itertools'

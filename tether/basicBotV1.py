@@ -1,111 +1,36 @@
-import time
+from datetime import datetime
 import itertools
-from API import ethPriceReport
+from report import EtherStream
 import csv
-#import pandas as pd
+# import pandas as pd
 import os
 
-ethPrice = ethPriceReport()['priceETH']
-ethPricePercentChange = ethPriceReport()['percentChangeHRLY']
-seconds = time.time()
+
+class AutoBot:
+    def __init__(self):
+        self.ether_data = EtherStream()
+        self.ether_price = self.ether_data.eth_price_report()['price_eth']
+        self.ether_percent_change_hourly = self.ether_data.eth_price_report()['percent_change_hourly']
+
+    def transaction(self, threshold: int):
+        """
+        1. Read what the current state of the account is
+        2. Make the purchase
+            a. If there is not enough funds, lower the purchase until purchase can be made( if it has to has to be reduced twice stop the purchase)
+        3. Sell
+        """
+        if 0 > -1:
+            with open('tether/data/price_data.csv', 'r') as f:
+                last_line = f.readlines()[-1]
+
+                print(type(last_line))
+            pass
+        elif self.ether_percent_change_hourly < -threshold:
+            #Buy
+            pass
 
 
+if __name__ == "__main__":
+    bot = AutoBot()
 
-def logger(sec, eth, usd):
-    with open('priceData.csv', 'a', newline='\n') as f:
-        fieldnames = ['time', 'ethReserve', 'usdReserve']
-        thewriter = csv.DictWriter(f, fieldnames=fieldnames)
-
-
-
-        #thewriter.writeheader()
-        thewriter.writerow({'time' : sec,'ethReserve' : eth, 'usdReserve' : usd})
-
-def reader():
-    #df = pd.read_csv('priceData.csv', header=0)
-
-    #print(df)
-
-    with open('priceData.csv', 'r') as f:
-        reader = csv.DictReader(f)
-
-        
-        allLines = list(reader)
-        #print(allLines)
-        latestLine = allLines[-1]
-
-        ethReserves = latestLine['ethReserve']
-        usdReserves = latestLine['usdReserve']
-
-        returnDictionary = {
-            'ethRes' : ethReserves,
-            'usdRes' : usdReserves
-        }
-
-    return returnDictionary
-
-def transactionMaker(transactionType, cryptoUsdPair):
-    if(transactionType == 1):
-        print("Buy Order Initiated")
-
-        simulationETH = reader()['ethRes']
-        simulationUSD = reader()['usdRes']
-
-        simulationUSD = float(simulationUSD)
-        simulationETH = float(simulationETH)
-
-        # print(simulationETH) Test Prints
-        # print(simulationUSD)
-        # print(type(cryptoUsdPair))
-
-        if(simulationUSD >= (0.25 * cryptoUsdPair)):
-            simulationUSD -= (0.25 * cryptoUsdPair)
-            simulationETH += 0.25
-
-            logger(seconds, simulationETH, round(simulationUSD, 3))
-        else:
-            print("There were not enough funds(USD) to make the transaction")
-
-    elif(transactionType == 2):
-        print("Sell Order Initiated")
-
-        simulationETH = reader()['ethRes']
-        simulationUSD = reader()['usdRes']
-
-        simulationUSD = float(simulationUSD)
-        simulationETH = float(simulationETH)
-
-        # print(simulationETH) Testing Prints
-        # print(simulationUSD)
-        # print(cryptoUsdPair)
-
-        if(simulationETH >= 0.25):
-            simulationUSD += (0.25 * cryptoUsdPair)
-            simulationETH -= 0.25
-
-            logger(seconds, simulationETH, round(simulationUSD, 3))
-        else:
-            print("There were not enough funds(ETH) to make the transcation")
-
-def interface():
-  print("Starting bot script")
-  startUpInput = input("Would you like to start the automation process (Y / N)").lower()
-
-  if (startUpInput in ['y', 'yes']):
-      thresholdInput = int(input("What is the percentage threshold for making purchases(enter integers, e.x 1, 2, -1, -2 ... ) "))
-
-      for x in itertools.repeat([]):
-        if(ethPricePercentChange > (thresholdInput/100)):
-          transactionMaker(2, ethPrice)
-        elif(ethPricePercentChange < -(thresholdInput/100)):
-          transactionMaker(1, ethPrice)
-        time.sleep(60)
-  elif (startUpInput in ['n', 'no']):
-    print("Goodbye! ")
-    return
-  else:
-    print("Invalid Input!")
-    interface()
-
-
-interface()
+    bot.transaction(1)
